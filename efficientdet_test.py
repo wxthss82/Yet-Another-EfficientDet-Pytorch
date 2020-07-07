@@ -58,7 +58,7 @@ x = x.to(torch.float32 if not use_float16 else torch.float16).permute(0, 3, 1, 2
 
 model = EfficientDetBackbone(compound_coef=compound_coef, num_classes=len(obj_list),
                              ratios=anchor_ratios, scales=anchor_scales)
-model.load_state_dict(torch.load(f'weights/efficientdet-d{compound_coef}.pth'))
+model.load_state_dict(torch.load('weights/efficientdet-d{compound_coef}.pth'))
 model.requires_grad_(False)
 model.eval()
 
@@ -95,7 +95,7 @@ def display(preds, imgs, imshow=True, imwrite=False):
             cv2.waitKey(0)
 
         if imwrite:
-            cv2.imwrite(f'test/img_inferred_d{compound_coef}_this_repo_{i}.jpg', imgs[i])
+            cv2.imwrite('test/img_inferred_d{compound_coef}_this_repo_{i}.jpg', imgs[i])
 
 
 out = invert_affine(framed_metas, out)
@@ -117,7 +117,7 @@ with torch.no_grad():
 
     t2 = time.time()
     tact_time = (t2 - t1) / 10
-    print(f'{tact_time} seconds, {1 / tact_time} FPS, @batch_size 1')
+    print('{tact_time} seconds, {1 / tact_time} FPS, @batch_size 1')
 
     # uncomment this if you want a extreme fps test
     # print('test2: model inferring only')
@@ -129,4 +129,4 @@ with torch.no_grad():
     #
     # t2 = time.time()
     # tact_time = (t2 - t1) / 10
-    # print(f'{tact_time} seconds, {32 / tact_time} FPS, @batch_size 32')
+    # print('{tact_time} seconds, {32 / tact_time} FPS, @batch_size 32')

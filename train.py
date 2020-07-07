@@ -87,7 +87,7 @@ class ModelWithLoss(nn.Module):
 
 
 def train(opt):
-    params = Params(f'projects/{opt.project}.yml')
+    params = Params('projects/{opt.project}.yml')
 
     if params.num_gpus == 0:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -97,8 +97,8 @@ def train(opt):
     else:
         torch.manual_seed(42)
 
-    opt.saved_path = opt.saved_path + f'/{params.project_name}/'
-    opt.log_path = opt.log_path + f'/{params.project_name}/tensorboard/'
+    opt.saved_path = opt.saved_path + '/{params.project_name}/'
+    opt.log_path = opt.log_path + '/{params.project_name}/tensorboard/'
     os.makedirs(opt.log_path, exist_ok=True)
     os.makedirs(opt.saved_path, exist_ok=True)
 
@@ -143,11 +143,11 @@ def train(opt):
         try:
             ret = model.load_state_dict(torch.load(weights_path), strict=False)
         except RuntimeError as e:
-            print(f'[Warning] Ignoring {e}')
+            print('[Warning] Ignoring {e}')
             print(
                 '[Warning] Don\'t panic if you see this, this might be because you load a pretrained weights with different number of classes. The rest of the weights should be loaded already.')
 
-        print(f'[Info] loaded weights: {os.path.basename(weights_path)}, resuming checkpoint from step: {last_step}')
+        print('[Info] loaded weights: {os.path.basename(weights_path)}, resuming checkpoint from step: {last_step}')
     else:
         last_step = 0
         print('[Info] initializing weights...')
@@ -178,7 +178,7 @@ def train(opt):
     else:
         use_sync_bn = False
 
-    writer = SummaryWriter(opt.log_path + f'/{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}/')
+    writer = SummaryWriter(opt.log_path + '/{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}/')
 
     # warp the model with loss function, to reduce the memory usage on gpu0 and speedup
     model = ModelWithLoss(model, debug=opt.debug)
@@ -257,7 +257,7 @@ def train(opt):
                     step += 1
 
                     if step % opt.save_interval == 0 and step > 0:
-                        save_checkpoint(model, f'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
+                        save_checkpoint(model, 'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
                         print('checkpoint...')
 
                 except Exception as e:
@@ -305,7 +305,7 @@ def train(opt):
                     best_loss = loss
                     best_epoch = epoch
 
-                    save_checkpoint(model, f'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
+                    save_checkpoint(model, 'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
 
                 model.train()
                            
@@ -314,7 +314,7 @@ def train(opt):
                     print('[Info] Stop training at epoch {}. The lowest loss achieved is {}'.format(epoch, best_loss))
                     break
     except KeyboardInterrupt:
-        save_checkpoint(model, f'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
+        save_checkpoint(model, 'efficientdet-d{opt.compound_coef}_{epoch}_{step}.pth')
         writer.close()
     writer.close()
 

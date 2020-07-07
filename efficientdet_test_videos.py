@@ -44,7 +44,7 @@ input_size = input_sizes[compound_coef] if force_input_size is None else force_i
 
 # load model
 model = EfficientDetBackbone(compound_coef=compound_coef, num_classes=len(obj_list))
-model.load_state_dict(torch.load(f'weights/efficientdet-d{compound_coef}.pth'))
+model.load_state_dict(torch.load('weights/efficientdet-d{compound_coef}.pth'))
 model.requires_grad_(False)
 model.eval()
 

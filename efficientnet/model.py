@@ -232,6 +232,8 @@ class EfficientNet(nn.Module):
     @classmethod
     def _check_model_name_is_valid(cls, model_name):
         """ Validates model name. """
+        import pdb
+        pdb.set_trace()
         valid_models = ['efficientnet-b'+str(i) for i in range(9)]
         if model_name not in valid_models:
             raise ValueError('model_name should be one of: ' + ', '.join(valid_models))
